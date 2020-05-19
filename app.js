@@ -19,12 +19,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-// Import Routes
+// IMPORT ROUTES
 const usersRouter = require('./routes/users');
 const productsRouter = require('./routes/products');
+const ordersRouter = require('./routes/orders')
 
+//USED ROUTES
 app.use('/api/users', usersRouter);
 app.use('/api/products', productsRouter);
+app.use('/api/orders', ordersRouter);
 
 
 module.exports = app;
