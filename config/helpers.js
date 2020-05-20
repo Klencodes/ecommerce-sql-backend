@@ -5,7 +5,7 @@ let conn = new Mysqli({
     Host: 'localhost', // IP/domain name 
     post: 3306, // port, default 3306 
     user: 'joshua', // username
-    passwd: '123456', // password
+    passwd: 'McBank$$', // password
     db: 'mega_shop'
 });
 
