@@ -49,7 +49,7 @@ router.get('/', function (req, res) {       // Sending Page Query Parameter is m
 /* GET ONE PRODUCT*/
 router.get('/:prodId', (req, res) => {
     let productId = req.params.prodId;
-    // console.log(productId)
+    console.log(productId)
     database.table('products as p')
         .join([
             {
