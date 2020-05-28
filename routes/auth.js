@@ -7,7 +7,9 @@ const bcrypt = require('bcrypt');
 
 
 // LOGIN ROUTE
-router.post('/login', [helper.hasAuthFields, helper.isPasswordAndUserMatch], (req, res) => {
+router.post('/login', 
+[helper.hasAuthFields, helper.isPasswordAndUserMatch], 
+(req, res) => {
     let token = jwt.sign({state: 'true', email: req.body.email, username: req.body.username}, helper.secret, {
         algorithm: 'HS512',
         expiresIn: '4h'
@@ -44,8 +46,8 @@ router.post('/register', [
         let email = req.body.email;
         let username = email.split("@")[0];
         let password = await bcrypt.hash(req.body.password, 10);
-        let fname = req.body.fname;
-        let lname = req.body.lname;
+        let first_name = req.body.first_name;
+        let last_name = req.body.last_name;
 
         /**
          * ROLE 777 = ADMIN
@@ -56,8 +58,8 @@ router.post('/register', [
             password: password,
             email: email,
             role: 555,
-            lname: lname || null,
-            fname: fname || null
+            last_name: last_name || null,
+            first_name: first_name || null
         }).then(lastId => {
             if (lastId > 0) {
                 res.status(201).json({message: 'Registration successful.'});

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {database} = require('../config/helpers')
-
+const {database} = require('../config/helpers');
+const crypto = require('crypto');
 
 // GET ALL ORDERS
 router.get('/', (req, res) => {
@@ -20,23 +20,25 @@ router.get('/', (req, res) => {
                 on: 'u.id = o.user_id'
             }
         ])
-        .withFields(['o.id', 'p.title', 'p.description', 'p.price', 'u.username'])
+        .withFields(['o.id', 'p.title as name', 'p.description', 'p.price', 'u.username'])
         .sort({id: 1})
         .getAll()
         .then(orders => {
             if (orders.length > 0) {
-                res.json(orders);
+                res.status(200).json(orders);
+                // res.json(orders);
             } else {
                 res.json({message: "No orders found"});
             }
 
-        }).catch(err => res.json(err));
+        }).catch(err => console.log(err));
+        // .catch(err => res.json(err));
 });
 
-// GET SINGLE ORDER
-router.get('/:id', async (req, res) => {
+// Get Single Order
+router.get('/:id',  (req, res) => {
     let orderId = req.params.id;
-    console.log(orderId);
+    // console.log(orderId);
 
     database.table('orders_details as od')
         .join([
@@ -53,7 +55,7 @@ router.get('/:id', async (req, res) => {
                 on: 'u.id = o.user_id'
             }
         ])
-        .withFields(['o.id', 'p.title', 'p.description', 'p.price', 'p.image', 'od.quantity as quantityOrdered'])
+        .withFields(['o.id', 'p.title as name', 'p.description', 'p.price', 'u.username'])
         .filter({'o.id': orderId})
         .getAll()
         .then(orders => {
@@ -67,7 +69,7 @@ router.get('/:id', async (req, res) => {
         }).catch(err => res.json(err));
 });
 
-// PLACE NEW ORDER
+// Place New Order
 router.post('/new', async (req, res) => {
     // let userId = req.body.userId;
     // let data = JSON.parse(req.body);
@@ -75,7 +77,7 @@ router.post('/new', async (req, res) => {
     console.log(userId);
     console.log(products);
 
-    if (userId !== null && userId > 0) {
+     if (userId !== null && userId > 0) {
         database.table('orders')
             .insert({
                 user_id: userId
@@ -84,7 +86,7 @@ router.post('/new', async (req, res) => {
             if (newOrderId > 0) {
                 products.forEach(async (p) => {
 
-                    let data = await database.table('products').filter({id: p.id}).withFields(['quantity']).get();
+                        let data = await database.table('products').filter({id: p.id}).withFields(['quantity']).get();
 
 
 
@@ -137,7 +139,7 @@ router.post('/new', async (req, res) => {
 
 });
 
-//FAKE PAYMENT GATEWAY CALL
+// Payment Gateway 
 router.post('/payment', (req, res) => {
     setTimeout(() => {
         res.status(200).json({success: true});

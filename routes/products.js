@@ -49,7 +49,7 @@ router.get('/', function (req, res) {       // Sending Page Query Parameter is m
 /* GET ONE PRODUCT*/
 router.get('/:prodId', (req, res) => {
     let productId = req.params.prodId;
-    console.log(productId)
+    // console.log(productId)
     database.table('products as p')
         .join([
             {
@@ -69,7 +69,7 @@ router.get('/:prodId', (req, res) => {
         .filter({'p.id': productId})
         .get()
         .then(prod => {
-            console.log(prod);
+            // console.log(prod);
             if (prod) {
                 res.status(200).json(prod);
             } else {
@@ -111,7 +111,7 @@ router.get('/category/:catName', (req, res) => { // Sending Page Query Parameter
             'p.id'
         ])
         .slice(startValue, endValue)
-        .sort({id: 1})
+        .sort({id: .1})
         .getAll()
         .then(prods => {
             if (prods.length > 0) {

@@ -6,7 +6,6 @@ const logger = require('morgan');
 const app = express();
 
 
-
 /* CORS */
 app.use(cors({
     origin: '*',
@@ -23,10 +22,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 // IMPORT ROUTES
 const productsRouter = require('./routes/products');
 const ordersRouter = require('./routes/orders');
+const usersRouter = require('./routes/users');
 
 //USED ROUTES
-
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
+app.use('/api/user', usersRouter);
+
 
 module.exports = app;
