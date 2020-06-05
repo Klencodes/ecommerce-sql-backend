@@ -20,25 +20,22 @@ router.get('/', (req, res) => {
                 on: 'u.id = o.user_id'
             }
         ])
-        .withFields(['o.id', 'p.title as name', 'p.description', 'p.price', 'u.username'])
-        .sort({id: 1})
+        .withFields(['o.id', 'p.title', 'p.description', 'p.price', 'u.username'])
         .getAll()
         .then(orders => {
             if (orders.length > 0) {
-                res.status(200).json(orders);
-                // res.json(orders);
+                res.json(orders);
             } else {
                 res.json({message: "No orders found"});
             }
 
-        }).catch(err => console.log(err));
-        // .catch(err => res.json(err));
+        }).catch(err => res.json(err));
 });
 
 // Get Single Order
-router.get('/:id',  (req, res) => {
+router.get('/:id', async (req, res) => {
     let orderId = req.params.id;
-    // console.log(orderId);
+    console.log(orderId);
 
     database.table('orders_details as od')
         .join([
@@ -55,11 +52,11 @@ router.get('/:id',  (req, res) => {
                 on: 'u.id = o.user_id'
             }
         ])
-        .withFields(['o.id', 'p.title as name', 'p.description', 'p.price', 'u.username'])
+        .withFields(['o.id', 'p.title', 'p.description', 'p.price', 'p.image', 'od.quantity as quantityOrdered'])
         .filter({'o.id': orderId})
         .getAll()
         .then(orders => {
-            console.log(orders);
+           
             if (orders.length > 0) {
                 res.json(orders);
             } else {
@@ -74,8 +71,6 @@ router.post('/new', async (req, res) => {
     // let userId = req.body.userId;
     // let data = JSON.parse(req.body);
     let {userId, products} = req.body;
-    console.log(userId);
-    console.log(products);
 
      if (userId !== null && userId > 0) {
         database.table('orders')
@@ -139,12 +134,11 @@ router.post('/new', async (req, res) => {
 
 });
 
-// Payment Gateway 
+// Payment Gateway
 router.post('/payment', (req, res) => {
     setTimeout(() => {
         res.status(200).json({success: true});
     }, 3000)
 });
-
 
 module.exports = router;
