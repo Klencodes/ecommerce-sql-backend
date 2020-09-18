@@ -5,7 +5,7 @@ const {database} = require('../config/helpers');
 /* GET users listing. */
 router.get('/', function (req, res) {
     database.table('users')
-        .withFields([ 'username' , 'email', 'fname', 'lname', 'age', 'role', 'id' ])
+        .withFields([ 'username' , 'email', 'first_name', 'last_name', 'age', 'role', 'id' ])
         .getAll().then((list) => {
         if (list.length > 0) {
             res.json({users: list});
@@ -25,7 +25,7 @@ router.get('/', function (req, res) {
 router.get('/:userId', (req, res) => {
     let userId = req.params.userId;
     database.table('users').filter({id: userId})
-        .withFields([ 'username' , 'email','fname', 'lname', 'age', 'role', 'id' ])
+        .withFields([ 'username' , 'email','first_name', 'last_name', 'age', 'role', 'id' ])
         .get().then(user => {
         if (user) {
             res.json({user});
@@ -67,8 +67,8 @@ router.patch('/:userId', async (req, res) => {
 
         let userEmail = req.body.email;
         let userPassword = req.body.password;
-        let userFirstName = req.body.fname;
-        let userLastName = req.body.lname;
+        let userFirstName = req.body.first_name;
+        let userLastName = req.body.last_name;
         let userUsername = req.body.username;
         let age = req.body.age;
 
@@ -77,8 +77,8 @@ router.patch('/:userId', async (req, res) => {
             email: userEmail !== undefined ? userEmail : user.email,
             password: userPassword !== undefined ? userPassword : user.password,
             username: userUsername !== undefined ? userUsername : user.username,
-            fname: userFirstName !== undefined ? userFirstName : user.fname,
-            lname: userLastName !== undefined ? userLastName : user.lname,
+            first_name: userFirstName !== undefined ? userFirstName : user.first_name,
+            last_name: userLastName !== undefined ? userLastName : user.last_name,
             age: age !== undefined ? age : user.age
         }).then(result => res.json('User updated successfully')).catch(err => res.json(err));
     }

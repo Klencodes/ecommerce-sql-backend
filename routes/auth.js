@@ -17,8 +17,8 @@ router.post('/login', [helper.hasAuthFields, helper.isPasswordAndUserMatch], (re
         auth: true,
         email: req.email,
         username: req.username,
-        fname: req.fname,
-        lname: req.lname,
+        first_name: req.first_name,
+        last_name: req.last_name,
         photoUrl: req.photoUrl,
         userId: req.userId,
 		type: req.type,
@@ -55,8 +55,8 @@ router.post('/register', [
         let email = req.body.email;
         let username = email.split("@")[0];
         let password = await bcrypt.hash(req.body.password, 10);
-        let fname = req.body.fname;
-        let lname = req.body.lname;
+        let first_name = req.body.first_name;
+        let last_name = req.body.last_name;
         let typeOfUser = req.body.typeOfUser;
         let photoUrl = req.body.photoUrl === null ? 'https://image.shutterstock.com/image-vector/person-gray-photo-placeholder-man-260nw-1259815156.jpg' : req.body.photoUrl
 
@@ -69,8 +69,8 @@ router.post('/register', [
             password: password || null,
             email: email,
             role: 555,
-            lname: lname || null,
-            fname: fname || null,
+            last_name: last_name || null,
+            first_name: first_name || null,
             type: typeOfUser || 'local',
             photoUrl: photoUrl
         }).then(lastId => {
